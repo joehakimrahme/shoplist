@@ -6,7 +6,13 @@
   </head>
   <body>
     <h1>{{ shoplist.name }}</h1>
-
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
     <ul>
       {% for item in shoplist.shopitem_set.all %}
       <li><a href="{% url 'remove_item' item_id=item.id %}">{{ item.name }}</a></li>

@@ -47,6 +47,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'shoplist.core.middlewares.catch_error.HttpResponseNotAllowedMiddleware',
 )
 
 ROOT_URLCONF = 'shoplist.urls'
