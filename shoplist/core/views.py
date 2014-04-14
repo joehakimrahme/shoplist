@@ -11,13 +11,13 @@ JB_SHOPLIST = "Joe and Bia's shopping list"
 
 
 def index(request):
-    sl = Shoplist.objects.get_or_create(name=JB_SHOPLIST)[0]
+    sl, created = Shoplist.objects.get_or_create(name=JB_SHOPLIST)
 
     return render(request, 'index.html', {'shoplist': sl})
 
 
 def add_item(request):
-    sl = Shoplist.objects.get_or_create(name=JB_SHOPLIST)[0]
+    sl, created = Shoplist.objects.get_or_create(name=JB_SHOPLIST)
     item = Shopitem(name=request.POST['newitem'])
     sl.shopitem_set.add(item)
 
