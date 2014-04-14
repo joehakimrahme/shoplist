@@ -9,11 +9,11 @@
 
     <ul>
       {% for item in shoplist.shopitem_set.all %}
-      <li><a href="/remove/{{ item.id }}">{{ item.name }}</a></li>
+      <li><a href="{% url 'remove_item' item_id=item.id %}">{{ item.name }}</a></li>
       {% endfor %}
     </ul>
 
-    <form action="{% url 'shoplist.core.views.add_item' %}" method="post">
+    <form action="{% url 'new_item' %}" method="post">
       {% csrf_token %}
       New Item: <input type="text" name="newitem" />
     </form>
