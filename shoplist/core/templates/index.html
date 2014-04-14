@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Shoplist</title>
+  </head>
+  <body>
+    <h1>{{ shoplist.name }}</h1>
+
+    <ul>
+      {% for item in shoplist.shopitem_set.all %}
+      <li><a href="/remove/{{ item.id }}">{{ item.name }}</a></li>
+      {% endfor %}
+    </ul>
+
+    <form action="{% url 'shoplist.core.views.add_item' %}" method="post">
+      {% csrf_token %}
+      New Item: <input type="text" name="newitem" />
+    </form>
+
+  </body>
+</html>
