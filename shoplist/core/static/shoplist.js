@@ -35,12 +35,11 @@ function getCookie(name) {
 }
 
 var csrftoken = getCookie('csrftoken');
+
 $( document ).ready(function() {
 
     $("li").click(function( event ) {
-
 	var id  = $(this).attr('value');
-
 	$.ajax({
 	    type: "DELETE",
 	    url: id.toString(),
@@ -49,19 +48,18 @@ $( document ).ready(function() {
 		var csrftoken = getCookie('csrftoken');
 
 	    	if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
-	    	    // Send the token to same-origin, relative URLs only.
-	    	    // Send the token only if the method warrants CSRF protection
-	    	    // Using the CSRFToken value acquired earlier
 	    	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
 	    	}
 	    },
 	    success: function(data){
-		console.log(data);
 		$(this).remove();
 	    },
 	});
 
 	$(this).remove();
+	$("#id_name").focus();
 	event.preventDefault();
     });
 });
+
+$("#id_name").focus();
