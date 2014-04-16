@@ -29,11 +29,11 @@
 
       <ul class="form-signin list-group" style="list-style-type: none;">
 	{% for item in shoplist.shopitem_set.all %}
-	<li class="list-group-item" value="{{ item.id }}"><a href="{% url 'remove_item' item_id=item.id %}" style="text-decoration: none;">{{ item.name }}</a></li>
+	<li class="list-group-item" value="{{ item.id }}"><a href="{% url 'item' item_id=item.id %}" style="text-decoration: none;">{{ item.name }}</a></li>
 	{% endfor %}
       </ul>
 
-      <form class="form-signin" action="{% url 'new_item' %}" method="post">
+      <form class="form-signin" action="{% url 'index' %}" method="post">
 	<div class="row">
 	  {% csrf_token %}
 	  {% bootstrap_form form %}
@@ -42,6 +42,7 @@
 	  <button class="btn btn-lg btn-primary btn-block" type="submit">New Item</button>
 	</div>
       </form>
-
+    </div>
+    <script src="{% static shoplist.js %}/shoplist.js"></script>
   </body>
 </html>

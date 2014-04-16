@@ -12,32 +12,32 @@ from shoplist.core.forms import ShopitemForm
 JB_SHOPLIST = "Joe and Bia's shopping list"
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST"])
 def index(request):
-    sl, created = Shoplist.objects.get_or_create(name=JB_SHOPLIST)
+    if request.method == "GET":
 
-    form = ShopitemForm()
+        sl, created = Shoplist.objects.get_or_create(name=JB_SHOPLIST)
+        form = ShopitemForm()
 
-    return render(request, 'index.html', {'shoplist': sl,
-                                          'form': form})
+        return render(request, 'index.html', {'shoplist': sl,
+                                              'form': form})
 
+    elif request.method == "POST":
+        sl, created = Shoplist.objects.get_or_create(name=JB_SHOPLIST)
 
-@require_http_methods(["POST"])
-def add_item(request):
-    sl, created = Shoplist.objects.get_or_create(name=JB_SHOPLIST)
+        form = ShopitemForm(request.POST)
 
-    form = ShopitemForm(request.POST)
+        if form.is_valid():
+            item = Shopitem(name=form.cleaned_data["name"])
+            sl.shopitem_set.add(item)
 
-    if form.is_valid():
-        item = Shopitem(name=form.cleaned_data["name"])
-        sl.shopitem_set.add(item)
-
-    return HttpResponseRedirect(reverse("shoplist.core.views.index"))
+        return HttpResponseRedirect(reverse("shoplist.core.views.index"))
 
 
 @require_http_methods(["DELETE"])
-def remove_item(request, item_id):
-    item = Shopitem.objects.get(id=item_id)
-    item.delete()
+def item(request, item_id):
+    if request.method == "DELETE":
+        item = Shopitem.objects.get(id=item_id)
+        item.delete()
 
-    return HttpResponseRedirect(reverse("shoplist.core.views.index"))
+        return HttpResponseRedirect(reverse("shoplist.core.views.index"))
