@@ -43,7 +43,7 @@ $( document ).ready(function() {
 
 	$.ajax({
 	    type: "DELETE",
-	    url: "" + id,
+	    url: id.toString(),
 
 	    beforeSend: function(xhr, settings) {
 		var csrftoken = getCookie('csrftoken');

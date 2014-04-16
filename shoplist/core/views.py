@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
@@ -9,7 +9,7 @@ from shoplist.core.models import Shopitem
 from shoplist.core.forms import ShopitemForm
 
 
-JB_SHOPLIST = "Joe and Bia's shopping list"
+JB_SHOPLIST = "Shopping list"
 
 
 @require_http_methods(["GET", "POST"])
@@ -40,4 +40,4 @@ def item(request, item_id):
         item = Shopitem.objects.get(id=item_id)
         item.delete()
 
-        return HttpResponseRedirect(reverse("shoplist.core.views.index"))
+        return HttpResponse()
