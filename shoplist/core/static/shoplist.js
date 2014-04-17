@@ -36,13 +36,15 @@ function getCookie(name) {
 
 var csrftoken = getCookie('csrftoken');
 
-$( document ).ready(function() {
+$(document).ready(function() {
 
     $("li").click(function( event ) {
 	var id  = $(this).attr('value');
 	$.ajax({
 	    type: "DELETE",
-	    url: id.toString(),
+
+	    //this is ugly and should be changed.
+	    url: $("h2")[0].textContent + "/" + id.toString(),
 
 	    beforeSend: function(xhr, settings) {
 		var csrftoken = getCookie('csrftoken');
@@ -51,6 +53,7 @@ $( document ).ready(function() {
 	    	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
 	    	}
 	    },
+
 	    success: function(data){
 		$(this).remove();
 	    },
