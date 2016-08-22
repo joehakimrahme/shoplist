@@ -1,49 +1,46 @@
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render
-from django.views.decorators.http import require_http_methods
+import json
+
+from django.http import HttpResponse
+from django.views import generic
+
+from shoplist.core import models
 
 
-from shoplist.core.models import Shoplist
-from shoplist.core.models import Shopitem
-from shoplist.core.forms import ShopitemForm
+class ShoplistListView(generic.ListView):
+    model = models.Shoplist
+    template_name = 'shoplist-list.html'
 
 
-JB_SHOPLIST = "Shopping"
+class ShopitemCreateView(generic.CreateView):
+    model = models.Shopitem
+    fields = ['name']
+    template_name = 'shopitem-create.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ShopitemCreateView, self).get_context_data(**kwargs)
+        try:
+            context['shoplist'] = models.Shoplist.objects.get(
+                name=self.kwargs['name'])
+        except models.Shoplist.DoesNotExist:
+            pass
+        context['list_name'] = self.kwargs['name']
+        return context
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        shoplist, _ = models.Shoplist.objects.get_or_create(
+            name=self.kwargs['name'])
+
+        instance.shoplist = shoplist
+        instance.save()
+        return super(ShopitemCreateView, self).form_valid(form)
 
 
-@require_http_methods(["GET", "POST"])
-def index(request):
-    if request.method == "GET":
-        return HttpResponseRedirect(
-            reverse("shoplist.core.views.shoplist", args=[JB_SHOPLIST]))
+class ShopitemDeleteView(generic.DeleteView):
+    model = models.Shopitem
 
-
-@require_http_methods(["DELETE"])
-def item(request, shoplist_name, item_id):
-    if request.method == "DELETE":
-        item = Shopitem.objects.get(id=item_id)
-        item.delete()
-
-        return HttpResponse()
-
-
-@require_http_methods(["GET", "POST", "DELETE"])
-def shoplist(request, shoplist_name):
-    if request.method == "GET":
-        shoplist, created = Shoplist.objects.get_or_create(name=shoplist_name)
-        form = ShopitemForm()
-
-        return render(request, 'index.html', {'shoplist': shoplist,
-                                              'form': form})
-    elif request.method == "POST":
-        form = ShopitemForm(request.POST)
-        shoplist = get_object_or_404(Shoplist, name=shoplist_name)
-        if form.is_valid():
-            Shopitem.objects.create(
-                name=form.cleaned_data["name"],
-                shoplist=shoplist)
-
-        return HttpResponseRedirect(
-            reverse("shoplist", args=[shoplist_name]))
+    def delete(self, request, *args, **kwargs):
+        self.get_object().delete()
+        payload = {'delete': 'ok'}
+        return HttpResponse(json.dumps(payload),
+                            content_type='application/json')

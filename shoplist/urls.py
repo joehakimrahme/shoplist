@@ -1,11 +1,13 @@
 from django.conf.urls import url
+from django.shortcuts import redirect
 
 from shoplist.core import views
 
-
 urlpatterns = (
-    # TODO(rahmu): this should point to a "new shoplist" form
-    url(r'^$', views.index, name="index"),
-    url(r'^(?P<shoplist_name>[\w ]+)$', views.shoplist, name="shoplist"),
-    url(r'^(?P<shoplist_name>[\w ]+)/(?P<item_id>\d+)$', views.item, name="item"),
+    url(r'^$',
+        views.ShoplistListView.as_view() , name="shoplist-list"),
+    url(r'^delete/(?P<pk>\d+)$',
+        views.ShopitemDeleteView.as_view(), name="shopitem-delete"),
+    url(r'^(?P<name>[\w-]+)$',
+        views.ShopitemCreateView.as_view(), name="shopitem-create"),
 )

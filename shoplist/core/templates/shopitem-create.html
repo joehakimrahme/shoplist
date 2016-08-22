@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        {% bootstrap_messages %}
+        <h2>{{ shoplist.name }}</h2>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+
+<ul id="item_list" class="form-signin list-group" style="list-style-type: none;">
+    {% for item in shoplist.shopitem_set.all %}
+    <li class="list-group-item" value="{{ item.id }}"><a href="{% url 'shopitem-delete' pk=item.id %}" style="text-decoration: none;">{{ item.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<form class="form-signin" action="{% url 'shopitem-create' name=list_name %}" method="post">
+    <div class="row">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+    </div>
+    <div class="row">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">New Item</button>
+    </div>
+</form>
+{% endblock %}
