@@ -41,8 +41,9 @@ def shoplist(request, shoplist_name):
         form = ShopitemForm(request.POST)
         shoplist = get_object_or_404(Shoplist, name=shoplist_name)
         if form.is_valid():
-            item = Shopitem(name=form.cleaned_data["name"])
-            shoplist.shopitem_set.add(item)
+            Shopitem.objects.create(
+                name=form.cleaned_data["name"],
+                shoplist=shoplist)
 
         return HttpResponseRedirect(
-            reverse("shoplist.core.views.shoplist", args=[shoplist_name]))
+            reverse("shoplist", args=[shoplist_name]))

@@ -13,6 +13,6 @@ class HttpResponseNotAllowedMiddleware(object):
                 "The method {} is not allowed on this resource".format(
                     request.method))
 
-            return HttpResponseRedirect(reverse("shoplist.core.views.index"))
+            return HttpResponseRedirect(reverse("index"))
 
         return response
