@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div class="page-header">
+            <h3>Available Lists</h3>
+        </div>
+        <ul class="list-group" style="list-style-type: none;">
+        {% for entry in object_list %}
+            <li class="list-group-item"><a href="{% url 'shopitem-create' name=entry.name %}">{{entry.name}}</a></li>
+        {% empty %}
+            <li class="list-group-item"><a href="{% url 'shopitem-create' name='Shopping' %}">Shopping</a></li>
+        {% endfor %}
+    </ul>
+</div>
+    <div class="col-md-4"></div>
+</div>
+{% endblock %}

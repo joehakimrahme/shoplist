@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 
 
@@ -16,3 +17,6 @@ class Shopitem(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('shopitem-create', kwargs={'name':self.shoplist.name})

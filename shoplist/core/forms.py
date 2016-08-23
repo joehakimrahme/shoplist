@@ -1,6 +1,9 @@
-from django import forms
+from django.forms import ModelForm
+
+from .models import Shopitem
 
 
-class ShopitemForm(forms.Form):
-
-    name = forms.CharField(max_length=100)
+class ShopitemForm(ModelForm):
+    class Meta:
+        model = Shopitem
+        fields = ['name']

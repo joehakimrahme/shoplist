@@ -38,30 +38,26 @@ var csrftoken = getCookie('csrftoken');
 
 $(document).ready(function() {
 
-    $("li").click(function( event ) {
-	var id  = $(this).attr('value');
-	$.ajax({
-	    type: "DELETE",
+    $("#item_list li").click(function( event ) {
+        $.ajax({
+            type: "DELETE",
+            url:$(this).children('a')[0].href,
+            beforeSend: function(xhr, settings) {
+                var csrftoken = getCookie('csrftoken');
 
-	    //this is ugly and should be changed.
-	    url: $("h2")[0].textContent + "/" + id.toString(),
+                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
 
-	    beforeSend: function(xhr, settings) {
-		var csrftoken = getCookie('csrftoken');
+            success: function(data){
+                $(this).remove();
+            },
+        });
 
-	    	if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
-	    	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-	    	}
-	    },
-
-	    success: function(data){
-		$(this).remove();
-	    },
-	});
-
-	$(this).remove();
-	$("#id_name").focus();
-	event.preventDefault();
+        $(this).remove();
+        $("#id_name").focus();
+        event.preventDefault();
     });
 });
 
